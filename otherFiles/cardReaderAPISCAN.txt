@@ -1,0 +1,48 @@
+class CardData {
+	Long returnCode;
+	String cardNumber;
+	public String getCardNumber() {
+		return cardNumber;
+	}
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
+	}
+	public Long getReturnCode() {
+		return this.returnCode;
+	}
+	public void setReturnCode(Long returnCode) {
+		this.returnCode = returnCode;
+	}
+}
+
+
+
+	@RequestMapping(value = "/cardNumber", method = RequestMethod.POST, headers = { "Accept=application/json" })
+	@ResponseStatus(HttpStatus.OK)
+	public Map<String,Object> readCardNumber(@RequestBody Map<String,Object> params) throws ALNTApplicationException {
+
+		Map<String,Object> result = new HashMap<String,Object>(); 
+		String readerName =(String)params.get("readerName");
+		String mapedReaderName = null;
+		CardData cardData = new CardData();
+		if(readerName == null || readerName.trim().length() == 0) {
+			result.put("RETURN_MESSAGE", "Input parameters readerName param empty");
+			result.put("RETURN_CODE", 1L);
+			return result;
+		} else {
+			cardData.setCardNumber("12345678");
+			cardData.setReturnCode(0L);
+		}
+		
+		if (cardData.getReturnCode() == 0) {
+			result.put("BADGE_ID",cardData.getCardNumber());
+		}
+		result.put("RETURN_CODE",cardData.getReturnCode());
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
